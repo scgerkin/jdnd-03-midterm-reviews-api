@@ -9,7 +9,7 @@ CREATE TABLE review(
     product_id INT UNSIGNED NOT NULL,
     title VARCHAR(200) NOT NULL,
     content TEXT,
-    datePosted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
@@ -18,6 +18,6 @@ CREATE TABLE comment(
     review_id INT UNSIGNED NOT NULL,
     title VARCHAR(200) NOT NULL,
     content TEXT,
-    datePosted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_posted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (review_id) REFERENCES review(id)
 );
