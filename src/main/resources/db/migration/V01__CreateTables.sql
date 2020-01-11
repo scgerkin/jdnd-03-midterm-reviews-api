@@ -1,0 +1,23 @@
+CREATE TABLE products(
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(300) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE reviews(
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    product_id INT UNSIGNED NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    content TEXT,
+    datePosted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE comments(
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    review_id INT UNSIGNED NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    content TEXT,
+    datePosted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (review_id) REFERENCES reviews(id)
+);

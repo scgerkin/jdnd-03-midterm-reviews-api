@@ -13,7 +13,7 @@ import java.util.Date;
 public class Comment extends BaseEntity {
 
     private String title;
-    private String text;
+    private String content;
     private Date datePosted;
     @ManyToOne
     private Review review;

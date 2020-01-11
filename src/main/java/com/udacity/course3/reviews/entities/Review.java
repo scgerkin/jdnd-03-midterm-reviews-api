@@ -13,7 +13,7 @@ import java.util.Date;
 public class Review extends BaseEntity{
 
     private String title;
-    private String text;
+    private String content;
     private Date datePosted;
     @ManyToOne
     private Product product;
