@@ -3,8 +3,8 @@ package com.udacity.course3.reviews.controller;
 import com.udacity.course3.reviews.entities.Comment;
 import com.udacity.course3.reviews.entities.Review;
 import com.udacity.course3.reviews.exceptions.ReviewNotFoundException;
-import com.udacity.course3.reviews.repositories.CommentRepository;
-import com.udacity.course3.reviews.repositories.ReviewRepository;
+import com.udacity.course3.reviews.repositories.jpa.CommentJpaRepository;
+import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +18,12 @@ import java.util.Optional;
 @RequestMapping("/comments")
 public class CommentsController {
 
-    private final CommentRepository commentRepository;
-    private final ReviewRepository reviewRepository;
+    private final CommentJpaRepository commentJpaRepository;
+    private final ReviewJpaRepository reviewJpaRepository;
 
-    public CommentsController(CommentRepository commentRepository, ReviewRepository reviewRepository) {
-        this.commentRepository = commentRepository;
-        this.reviewRepository = reviewRepository;
+    public CommentsController(CommentJpaRepository commentJpaRepository, ReviewJpaRepository reviewJpaRepository) {
+        this.commentJpaRepository = commentJpaRepository;
+        this.reviewJpaRepository = reviewJpaRepository;
     }
 
 
@@ -39,10 +39,10 @@ public class CommentsController {
      */
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.POST)
     public ResponseEntity<Comment> createCommentForReview(@PathVariable("reviewId") Long reviewId, @RequestBody Comment comment) {
-        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        Optional<Review> optionalReview = reviewJpaRepository.findById(reviewId);
         if (optionalReview.isPresent()) {
             comment.setReview(optionalReview.get());
-            return  ResponseEntity.ok(commentRepository.save(comment));
+            return  ResponseEntity.ok(commentJpaRepository.save(comment));
         }
         else throw new ReviewNotFoundException(reviewId);
     }
@@ -58,9 +58,9 @@ public class CommentsController {
      */
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
     public ResponseEntity<List<Comment>> listCommentsForReview(@PathVariable("reviewId") Long reviewId) {
-        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        Optional<Review> optionalReview = reviewJpaRepository.findById(reviewId);
         if (optionalReview.isPresent()) {
-            return ResponseEntity.ok(commentRepository.findAllByReview(optionalReview.get()));
+            return ResponseEntity.ok(commentJpaRepository.findAllByReview(optionalReview.get()));
         }
         else {
             throw new ReviewNotFoundException(reviewId);

@@ -2,7 +2,7 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entities.Product;
 import com.udacity.course3.reviews.exceptions.ProductNotFoundException;
-import com.udacity.course3.reviews.repositories.ProductRepository;
+import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +17,10 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductsController {
 
-    private final ProductRepository productRepository;
+    private final ProductJpaRepository productJpaRepository;
 
-    public ProductsController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductsController(ProductJpaRepository productJpaRepository) {
+        this.productJpaRepository = productJpaRepository;
     }
 
     /**
@@ -32,7 +32,7 @@ public class ProductsController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(Product product) {
-        productRepository.save(product);
+        productJpaRepository.save(product);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ProductsController {
      */
     @RequestMapping(value = "/{id}")
     public ResponseEntity<Product> findById(@PathVariable("id") Long id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
+        Optional<Product> optionalProduct = productJpaRepository.findById(id);
         if (optionalProduct.isPresent()) {
             return ResponseEntity.ok(optionalProduct.get());
         }
@@ -59,6 +59,6 @@ public class ProductsController {
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Product> listProducts() {
-        return productRepository.findAll();
+        return productJpaRepository.findAll();
     }
 }

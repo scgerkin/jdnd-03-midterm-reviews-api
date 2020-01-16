@@ -1,6 +1,7 @@
 package com.udacity.course3.reviews.repositories;
 
 import com.udacity.course3.reviews.entities.Product;
+import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ProductRepositoryTest {
+public class ProductJpaRepositoryTest {
     @Autowired
     DataSource dataSource;
     @Autowired
@@ -30,7 +31,7 @@ public class ProductRepositoryTest {
     @Autowired
     TestEntityManager testEntityManager;
     @Autowired
-    ProductRepository productRepository;
+    ProductJpaRepository productJpaRepository;
 
     @Test
     public void injectedComponentsAreNotNull() {
@@ -38,19 +39,19 @@ public class ProductRepositoryTest {
         assertThat(jdbcTemplate).isNotNull();
         assertThat(entityManager).isNotNull();
         assertThat(testEntityManager).isNotNull();
-        assertThat(productRepository).isNotNull();
+        assertThat(productJpaRepository).isNotNull();
     }
 
     @Test
     public void testCreateProduct() {
-        Product expected = productRepository.save(getProduct());
+        Product expected = productJpaRepository.save(getProduct());
         assertThat(expected).isNotNull();
     }
 
     @Test
     public void testFindById() {
-        Product expected = productRepository.save(getProduct());
-        Optional<Product> actual = productRepository.findById(expected.getId());
+        Product expected = productJpaRepository.save(getProduct());
+        Optional<Product> actual = productJpaRepository.findById(expected.getId());
         if (actual.isPresent()) {
             assertThat(expected.getId()).isEqualTo(actual.get().getId());
         }
@@ -61,12 +62,12 @@ public class ProductRepositoryTest {
 
     @Test
     public void testListProducts() {
-        productRepository.save(getProduct());
+        productJpaRepository.save(getProduct());
         Product secondProduct = new Product();
         secondProduct.setName("asdf");
-        productRepository.save(secondProduct);
+        productJpaRepository.save(secondProduct);
 
-        List<Product> productList = productRepository.findAll();
+        List<Product> productList = productJpaRepository.findAll();
         assertThat(productList.size()).isEqualTo(2);
     }
 
