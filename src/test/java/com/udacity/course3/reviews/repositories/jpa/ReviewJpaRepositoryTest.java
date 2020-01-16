@@ -1,9 +1,7 @@
-package com.udacity.course3.reviews.repositories;
+package com.udacity.course3.reviews.repositories.jpa;
 
-import com.udacity.course3.reviews.entities.Comment;
 import com.udacity.course3.reviews.entities.Product;
 import com.udacity.course3.reviews.entities.Review;
-import com.udacity.course3.reviews.repositories.jpa.CommentJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;
 import org.junit.Test;
@@ -24,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class CommentJpaRepositoryTest {
+public class ReviewJpaRepositoryTest {
 
     @Autowired
     DataSource dataSource;
@@ -38,8 +36,9 @@ public class CommentJpaRepositoryTest {
     ProductJpaRepository productJpaRepository;
     @Autowired
     ReviewJpaRepository reviewJpaRepository;
-    @Autowired
-    CommentJpaRepository commentJpaRepository;
+
+    private static Product product;
+    private static Review review;
 
     @Test
     public void injectedComponentsAreNotNull() {
@@ -49,51 +48,53 @@ public class CommentJpaRepositoryTest {
         assertThat(testEntityManager).isNotNull();
         assertThat(productJpaRepository).isNotNull();
         assertThat(reviewJpaRepository).isNotNull();
-        assertThat(commentJpaRepository).isNotNull();
     }
 
     @Test
-    public void testCreateCommentForReview() {
+    public void testCreateReviewForProduct() {
         Product product = new Product();
-        product.setName("testCreateCommentForReview Product Title");
-        product.setDescription("testCreateCommentForReview Product Description");
+        product.setName("testCreateReviewForProduct Product Title");
+        product.setDescription("testCreateReviewForProduct Product Description");
         product = productJpaRepository.save(product);
         Review review = new Review();
-        review.setTitle("testCreateCommentForReview Review Title");
-        review.setContent("testCreateCommentForReview Review Content");
+        review.setTitle("testCreateReviewForProduct Review Title");
+        review.setContent("testCreateReviewForProduct Review Content");
         review.setProduct(product);
         review.setDatePosted(new Date(System.currentTimeMillis()));
-        review = reviewJpaRepository.save(review);
-        Comment comment = new Comment();
-        comment.setTitle("testCreateCommentForReview Comment Title");
-        comment.setContent("testCreateCommentForReview Comment Content");
-        comment.setDatePosted(new Date(System.currentTimeMillis()));
-        comment.setReview(review);
-        Comment expected = commentJpaRepository.save(comment);
+        Review expected = reviewJpaRepository.save(review);
         assertThat(expected).isNotNull();
     }
 
     @Test
-    public void testListCommentsForReview() {
+    public void testFindAll() {
         Product product = new Product();
-        product.setName("testListCommentsForReview Product Title");
-        product.setDescription("testListCommentsForReview Product Description");
+        product.setName("testFindAll Product Title");
+        product.setDescription("testFindAll Product Description");
         product = productJpaRepository.save(product);
         Review review = new Review();
-        review.setTitle("testListCommentsForReview Review Title");
-        review.setContent("testListCommentsForReview Review Content");
+        review.setTitle("testFindAll Review Title");
+        review.setContent("testFindAll Review Content");
+        review.setProduct(product);
+        review.setDatePosted(new Date(System.currentTimeMillis()));
+        reviewJpaRepository.save(review);
+        List<Review> reviewList = reviewJpaRepository.findAll();
+        assertThat(reviewList.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testListReviewsForProduct() {
+        Product product = new Product();
+        product.setName("testListReviewsForProduct Product Title");
+        product.setDescription("testListReviewsForProduct Product Description");
+        product = productJpaRepository.save(product);
+        Review review = new Review();
+        review.setTitle("testListReviewsForProduct Review Title");
+        review.setContent("testListReviewsForProduct Review Content");
         review.setProduct(product);
         review.setDatePosted(new Date(System.currentTimeMillis()));
         review = reviewJpaRepository.save(review);
-        Comment comment = new Comment();
-        comment.setTitle("testListCommentsForReview Comment Title");
-        comment.setContent("testListCommentsForReview Comment Content");
-        comment.setDatePosted(new Date(System.currentTimeMillis()));
-        comment.setReview(review);
-        commentJpaRepository.save(comment);
-        List<Comment> commentList = commentJpaRepository.findAllByReview(review);
-        assertThat(commentList.size()).isEqualTo(1);
+        List<Review> reviewList = reviewJpaRepository.findAllByProduct(product);
+        assertThat(reviewList.size()).isEqualTo(1);
     }
-
 
 }
