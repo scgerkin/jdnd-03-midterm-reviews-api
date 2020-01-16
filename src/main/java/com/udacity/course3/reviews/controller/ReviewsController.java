@@ -1,10 +1,12 @@
 package com.udacity.course3.reviews.controller;
 
+import com.udacity.course3.reviews.persistence.documents.ReviewDocument;
 import com.udacity.course3.reviews.persistence.entities.Product;
 import com.udacity.course3.reviews.persistence.entities.Review;
 import com.udacity.course3.reviews.exceptions.ProductNotFoundException;
 import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;
+import com.udacity.course3.reviews.repositories.mongo.ReviewMongoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +20,15 @@ import java.util.Optional;
 public class ReviewsController {
 
     private final ReviewJpaRepository reviewJpaRepository;
+    private final ReviewMongoRepository reviewMongoRepository;
     private final ProductJpaRepository productJpaRepository;
 
-    public ReviewsController(ReviewJpaRepository reviewJpaRepository, ProductJpaRepository productJpaRepository) {
+
+    public ReviewsController(ReviewJpaRepository reviewJpaRepository,
+                             ReviewMongoRepository reviewMongoRepository,
+                             ProductJpaRepository productJpaRepository) {
         this.reviewJpaRepository = reviewJpaRepository;
+        this.reviewMongoRepository = reviewMongoRepository;
         this.productJpaRepository = productJpaRepository;
     }
 
@@ -41,7 +48,9 @@ public class ReviewsController {
         Optional<Product> optionalProduct = productJpaRepository.findById(productId);
         if (optionalProduct.isPresent()) {
             review.setProduct(optionalProduct.get());
-            return ResponseEntity.ok(reviewJpaRepository.save(review));
+            review = reviewJpaRepository.save(review);
+            reviewMongoRepository.save(new ReviewDocument(review));
+            return ResponseEntity.ok(review);
         }
         else {
             throw new ProductNotFoundException(productId);

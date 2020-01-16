@@ -1,5 +1,6 @@
 package com.udacity.course3.reviews.persistence.documents;
 
+import com.udacity.course3.reviews.persistence.entities.Review;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -34,6 +35,14 @@ public class ReviewDocument {
     private List<CommentDocument> comments = new ArrayList<>();
 
     public ReviewDocument() {
+    }
+
+    public ReviewDocument(Review review) {
+        this.jpaId = review.getId();
+        this.title = review.getTitle();
+        this.content = review.getContent();
+        this.datePosted = review.getDatePosted();
+        this.productId = review.getProduct().getId();
     }
 
     @Override
