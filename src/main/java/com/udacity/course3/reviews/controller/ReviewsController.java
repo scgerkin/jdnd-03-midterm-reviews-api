@@ -64,10 +64,10 @@ public class ReviewsController {
      * @throws ProductNotFoundException if the product ID is invalid or does not exist.
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
-    public ResponseEntity<List<Review>> listReviewsForProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<List<ReviewDocument>> listReviewsForProduct(@PathVariable("productId") Long productId) {
         Optional<Product> optionalProduct = productJpaRepository.findById(productId);
         if (optionalProduct.isPresent()) {
-            return ResponseEntity.ok(reviewJpaRepository.findAllByProduct(optionalProduct.get()));
+            return ResponseEntity.ok(reviewMongoRepository.findAllByProductId(optionalProduct.get().getId()));
         }
         else {
             throw new ProductNotFoundException(productId);
