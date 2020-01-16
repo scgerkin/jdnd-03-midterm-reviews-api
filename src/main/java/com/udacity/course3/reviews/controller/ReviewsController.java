@@ -1,7 +1,7 @@
 package com.udacity.course3.reviews.controller;
 
-import com.udacity.course3.reviews.entities.Product;
-import com.udacity.course3.reviews.entities.Review;
+import com.udacity.course3.reviews.persistence.entities.Product;
+import com.udacity.course3.reviews.persistence.entities.Review;
 import com.udacity.course3.reviews.exceptions.ProductNotFoundException;
 import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;

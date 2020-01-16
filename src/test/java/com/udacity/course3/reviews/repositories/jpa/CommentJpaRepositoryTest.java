@@ -1,11 +1,8 @@
 package com.udacity.course3.reviews.repositories.jpa;
 
-import com.udacity.course3.reviews.entities.Comment;
-import com.udacity.course3.reviews.entities.Product;
-import com.udacity.course3.reviews.entities.Review;
-import com.udacity.course3.reviews.repositories.jpa.CommentJpaRepository;
-import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
-import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;
+import com.udacity.course3.reviews.persistence.entities.Comment;
+import com.udacity.course3.reviews.persistence.entities.Product;
+import com.udacity.course3.reviews.persistence.entities.Review;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

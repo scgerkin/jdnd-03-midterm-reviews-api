@@ -1,7 +1,7 @@
 package com.udacity.course3.reviews.controller;
 
-import com.udacity.course3.reviews.entities.Comment;
-import com.udacity.course3.reviews.entities.Review;
+import com.udacity.course3.reviews.persistence.entities.Comment;
+import com.udacity.course3.reviews.persistence.entities.Review;
 import com.udacity.course3.reviews.exceptions.ReviewNotFoundException;
 import com.udacity.course3.reviews.repositories.jpa.CommentJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;

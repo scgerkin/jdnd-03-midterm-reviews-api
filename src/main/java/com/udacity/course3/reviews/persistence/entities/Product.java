@@ -1,4 +1,4 @@
-package com.udacity.course3.reviews.entities;
+package com.udacity.course3.reviews.persistence.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

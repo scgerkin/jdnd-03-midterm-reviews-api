@@ -1,7 +1,6 @@
 package com.udacity.course3.reviews.repositories.jpa;
 
-import com.udacity.course3.reviews.entities.Product;
-import com.udacity.course3.reviews.repositories.jpa.ProductJpaRepository;
+import com.udacity.course3.reviews.persistence.entities.Product;
 import junit.framework.AssertionFailedError;
 import org.junit.Test;
 import org.junit.runner.RunWith;
