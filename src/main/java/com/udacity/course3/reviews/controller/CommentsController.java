@@ -1,10 +1,14 @@
 package com.udacity.course3.reviews.controller;
 
+import com.udacity.course3.reviews.persistence.documents.CommentDocument;
+import com.udacity.course3.reviews.persistence.documents.ReviewDocument;
 import com.udacity.course3.reviews.persistence.entities.Comment;
 import com.udacity.course3.reviews.persistence.entities.Review;
 import com.udacity.course3.reviews.exceptions.ReviewNotFoundException;
 import com.udacity.course3.reviews.repositories.jpa.CommentJpaRepository;
 import com.udacity.course3.reviews.repositories.jpa.ReviewJpaRepository;
+import com.udacity.course3.reviews.repositories.mongo.CommentMongoRepository;
+import com.udacity.course3.reviews.repositories.mongo.ReviewMongoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +23,18 @@ import java.util.Optional;
 public class CommentsController {
 
     private final CommentJpaRepository commentJpaRepository;
+    private final CommentMongoRepository commentMongoRepository;
     private final ReviewJpaRepository reviewJpaRepository;
+    private final ReviewMongoRepository reviewMongoRepository;
 
-    public CommentsController(CommentJpaRepository commentJpaRepository, ReviewJpaRepository reviewJpaRepository) {
+    public CommentsController(CommentJpaRepository commentJpaRepository,
+                              CommentMongoRepository commentMongoRepository,
+                              ReviewJpaRepository reviewJpaRepository,
+                              ReviewMongoRepository reviewMongoRepository) {
         this.commentJpaRepository = commentJpaRepository;
+        this.commentMongoRepository = commentMongoRepository;
         this.reviewJpaRepository = reviewJpaRepository;
+        this.reviewMongoRepository = reviewMongoRepository;
     }
 
 
@@ -42,7 +53,16 @@ public class CommentsController {
         Optional<Review> optionalReview = reviewJpaRepository.findById(reviewId);
         if (optionalReview.isPresent()) {
             comment.setReview(optionalReview.get());
-            return  ResponseEntity.ok(commentJpaRepository.save(comment));
+            comment = commentJpaRepository.save(comment);
+            Optional<ReviewDocument> optionalReviewDocument = reviewMongoRepository.findByJpaId(optionalReview.get().getId());
+            if (optionalReviewDocument.isPresent()) {
+                ReviewDocument reviewDocument = optionalReviewDocument.get();
+                List<CommentDocument> commentDocuments = reviewDocument.getComments();
+                commentDocuments.add(new CommentDocument(comment));
+                reviewDocument.setComments(commentDocuments);
+                reviewMongoRepository.save(reviewDocument);
+            }
+            return  ResponseEntity.ok(comment);
         }
         else throw new ReviewNotFoundException(reviewId);
     }

@@ -1,5 +1,6 @@
 package com.udacity.course3.reviews.persistence.documents;
 
+import com.udacity.course3.reviews.persistence.entities.Comment;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,5 +26,12 @@ public class CommentDocument {
     private Date datePosted;
 
     public CommentDocument() {
+    }
+
+    public CommentDocument(Comment comment) {
+        this.jpaId = comment.getId();
+        this.title = comment.getTitle();
+        this.content = comment.getContent();
+        this.datePosted = comment.getDatePosted();
     }
 }
