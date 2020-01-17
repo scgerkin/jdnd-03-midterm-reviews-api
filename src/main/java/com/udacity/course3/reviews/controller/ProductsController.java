@@ -31,7 +31,7 @@ public class ProductsController {
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(Product product) {
+    public void createProduct(@RequestBody Product product) {
         productJpaRepository.save(product);
     }
 
